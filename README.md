@@ -25,6 +25,7 @@ DeviceProcessEvents
 | where FolderPath has "Downloads" or ProcessCommandLine has  "Downloads"
 | project TimeGenerated, AccountName, ActionType, FileName, ProcessCommandLine, InitiatingProcessFileName
 ```
+<img width="1334" height="229" alt="Screenshot 2025-12-08 Flag 1" src="https://github.com/user-attachments/assets/51de2b05-6b42-4492-9942-704548be1cc1" />
 
 Answer: -ExecutionPolicy
 
