@@ -20,10 +20,10 @@ Why This Query Is Best:
 DeviceProcessEvents shows command-line parameters and time ordering needed to locate the earliest anomalous execution.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where FolderPath contains "Downloads"
-| order by Timestamp asc
-| take 1
+| where FolderPath has "Downloads" or ProcessCommandLine has  "Downloads"
+| project TimeGenerated, AccountName, ActionType, FileName, ProcessCommandLine, InitiatingProcessFileName
 ```
 
 Answer: -ExecutionPolicy
