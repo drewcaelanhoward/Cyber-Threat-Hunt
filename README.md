@@ -25,7 +25,7 @@ DeviceProcessEvents
 | where FolderPath has "Downloads" or ProcessCommandLine has  "Downloads"
 | project TimeGenerated, AccountName, ActionType, FileName, ProcessCommandLine, InitiatingProcessFileName
 ```
-<img width="1334" height="229" alt="Screenshot 2025-12-08 Flag 1" src="https://github.com/user-attachments/assets/51de2b05-6b42-4492-9942-704548be1cc1" />
+<img width="1334" height="264" alt="Screenshot 2025-12-08 Flag 1" src="https://github.com/user-attachments/assets/51de2b05-6b42-4492-9942-704548be1cc1" />
 
 Answer: -ExecutionPolicy
 
@@ -40,9 +40,12 @@ Why This Query Is Best:
 FileEvents reveal user interaction with files, which is ideal for spotting staged artifacts.
 ```kql
 DeviceFileEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
 | where FileName contains "Defender"
+| project TimeGenerated, ActionType, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessFolderPath 
 ```
+<img width="1334" height="265" alt="Screenshot 2025-12-08 flag 2" src="https://github.com/user-attachments/assets/0100b97a-a714-4abb-ab6f-1c25b2826f5b" />
 
 Answer: DefenderTamperArtifact.lnk
 
