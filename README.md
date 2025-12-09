@@ -81,11 +81,13 @@ Why This Query Is Best:
 Sorting descending reveals the final recon attempt within the activity chain.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
 | where ProcessCommandLine contains "qwi"
-| order by Timestamp desc
-| take 1
+| project TimeGenerated, AccountName, ActionType, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated desc
 ```
+<img width="1334" height="272" alt="Screenshot 2025-12-08 f4" src="https://github.com/user-attachments/assets/3fb0400c-a661-4aaa-b8b8-9516acfab75d" />
 
 Answer: 2025-10-09T12:51:44.3425653Z
 
@@ -101,9 +103,12 @@ WMIC commands are a common method for attackers to perform quick drive mapping.
 
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine contains "logicaldisk"
+| where ProcessCommandLine has_any ("disk", "Drive", "logicaldisk")
+| project TimeGenerated, AccountName, ActionType, FileName, ProcessCommandLine, InitiatingProcessFileName
 ```
+<img width="1334" height="228" alt="f5" src="https://github.com/user-attachments/assets/f13c177a-145e-4be8-90d1-1badcb79e963" />
 
 Answer:
 "cmd.exe" /c wmic logicaldisk get name,freespace,size
@@ -120,9 +125,15 @@ Process ancestry is best viewed in DeviceProcessEvents, especially for network-t
 
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
+| where AccountName == "g4bri3lintern"
 | where DeviceName == "gab-intern-vm"
-| where FileName =~ "RuntimeBroker.exe"
+| where ProcessCommandLine !contains "msedgewebview2.exe"
+| where ProcessCommandLine has_any ("nslookup","Resolve-DnsName","ping ","tracert","traceroute","Test-NetConnection","Invoke-WebRequest","curl","net use","net view","Get-SmbSession","Get-SmbConnection","ipconfig /displaydns","ipconfig /all","netstat")
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, FolderPath, InitiatingProcessParentFileName
+| order by TimeGenerated desc
 ```
+<img width="1334" height="249" alt="f6" src="https://github.com/user-attachments/assets/c5e6f217-cd4a-424e-ba8d-6a9c7a341441" />
 
 Answer: RuntimeBroker.exe
 
