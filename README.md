@@ -60,9 +60,12 @@ Why This Query Is Best:
 ProcessCommandLine directly exposes clipboard-harvesting attempts.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine contains "Get-Clipboard"
+| where ProcessCommandLine has_any ("Clip", "Clipboard")
+| project TimeGenerated, AccountName, ActionType, FileName, ProcessCommandLine, InitiatingProcessFileName
 ```
+<img width="1334" height="104" alt="Screenshot 2025-12-08 f3" src="https://github.com/user-attachments/assets/6a07fb91-b698-44f1-9212-762dd200fd70" />
 
 Answer:
 "powershell.exe" -NoProfile -Sta -Command "try { Get-Clipboard | Out-Null } catch { }"
