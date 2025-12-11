@@ -148,10 +148,15 @@ Why This Query Is Best:
 DeviceProcessEvents exposes unique process identifiers associated with session enumeration.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
+| where AccountName == "g4bri3lintern"
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine contains "query session"
+| where ProcessCommandLine !contains "msedgewebview2.exe"
+| where ProcessCommandLine has_any ("nslookup","Resolve-DnsName","ping ","tracert","traceroute","Test-NetConnection","Invoke-WebRequest","curl","net use","net view","Get-SmbSession","Get-SmbConnection","ipconfig /displaydns","ipconfig /all","netstat")
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, FolderPath, InitiatingProcessParentFileName, InitiatingProcessUniqueId
+| order by TimeGenerated desc
 ```
-
+<img width="1146" height="212" alt="Screenshot 2025-12-11 at 12 07 26 PM" src="https://github.com/user-attachments/assets/a934af11-77bb-4036-930d-205146c6296d" />
 Answer: 2533274790397065
 
 🚩 Flag 8 – Runtime Application Inventory
