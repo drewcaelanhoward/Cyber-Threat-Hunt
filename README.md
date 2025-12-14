@@ -282,9 +282,14 @@ Why This Query Is Best:
 ProcessCommandLine reveals exact tasknames used in persistence mechanisms.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine contains "schtasks"
+| where FileName has_any ("schtasks.exe", "powershell.exe")
+| where ProcessCommandLine has_any (" /create ", "Register-ScheduledTask")
+| project TimeGenerated, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated desc
 ```
+![image](https://github.com/user-attachments/assets/0188fe63-2bb4-4c72-a09b-3f4a4099e4d4)
 
 Answer: SupportToolUpdater
 
