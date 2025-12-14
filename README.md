@@ -218,10 +218,11 @@ Why This Query Is Best:
 DeviceNetworkEvents stores URLs and timestamps, enabling clear identification of the earliest outbound attempt.
 ```kql
 DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-10-9) .. datetime(2025-10-10))
 | where DeviceName == "gab-intern-vm"
-| where RemoteUrl contains "msftconnecttest"
-| order by Timestamp asc
+| order by TimeGenerated asc 
 ```
+![image](https://github.com/user-attachments/assets/62ff4b3d-2d8e-45b8-8f2d-74acae3ca3f5)
 
 Answer: www.msftconnecttest.com
 
