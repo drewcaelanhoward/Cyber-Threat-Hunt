@@ -237,9 +237,14 @@ Why This Query Is Best:
 FileEvents provide definitive drop paths and creation activity.
 ```kql
 DeviceFileEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where FileName contains "ReconArtifacts"
+| where ActionType =~ "FileCreated"
+| where FileName endswith ".zip" or FileName endswith ".csv" or FileName endswith ".7z"
+| project TimeGenerated, FileName, FileSize, InitiatingProcessCommandLine, InitiatingProcessFileName, FolderPath
+| order by TimeGenerated asc
 ```
+![image](https://github.com/user-attachments/assets/1d4d4d4b-79fc-453d-a47b-7d4375b280ff)
 
 Answer:
 C:\Users\Public\ReconArtifacts.zip
