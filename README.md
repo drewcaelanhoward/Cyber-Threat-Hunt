@@ -260,10 +260,14 @@ Why This Query Is Best:
 NetworkEvents capture IPs even when URLs are not present.
 ```kql
 DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
+| where ActionType in ("ConnectionSuccess", "ConnectionAttempted")
+| where InitiatingProcessFileName in ("powershell.exe", "curl.exe", "wget.exe", "python.exe", "cmd.exe")
+| project Timestamp, InitiatingProcessFileName, RemoteIP, RemotePort, RemoteUrl, LocalPort, Protocol, InitiatingProcessCommandLine
 | order by Timestamp desc
-| take 1
 ```
+![image](https://github.com/user-attachments/assets/9097d1a8-1c91-4069-b322-9752ce2e4d8b)
 
 Answer: 100.29.147.161
 
