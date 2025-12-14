@@ -194,11 +194,16 @@ Why This Query Is Best:
 Sorting ascending gives the earliest privilege-related command in the chain.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
+| where AccountName == "g4bri3lintern"
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine contains "whoami"
-| order by Timestamp asc
-| take 1
+| where ProcessCommandLine !contains "backgroundTaskHost"
+| where ProcessCommandLine !contains "msedgewebview2.exe"
+| where ProcessCommandLine contains ("Priv") or ProcessCommandLine contains ("Privilege") or ProcessCommandLine contains "Group"
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, FolderPath, InitiatingProcessParentFileName, InitiatingProcessUniqueId
+| order by TimeGenerated desc
 ```
+![image](https://github.com/user-attachments/assets/2100efc9-2bd1-45fc-94d0-1ce481aa2795)
 
 Answer: 2025-10-09T12:52:14.3135459Z
 
