@@ -321,8 +321,10 @@ Why This Query Is Best:
 FileEvents reveal timestamp correlation between execution and planted artifacts.
 ```kql
 DeviceFileEvents
+| where TimeGenerated >= todatetime('2025-10-09T12:58:17.4364257Z')
 | where DeviceName == "gab-intern-vm"
-| where FileName contains "SupportChat"
+| order by TimeGenerated desc
 ```
+![image](https://github.com/user-attachments/assets/0bb37799-2d78-42da-8028-360bf88ab456)
 
 Answer: SupportChat_log.lnk
