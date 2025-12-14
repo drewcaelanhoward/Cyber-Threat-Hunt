@@ -170,9 +170,16 @@ Why This Query Is Best:
 Tasklist is the most common Windows-native tool for runtime inventory.
 ```kql
 DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-1) .. datetime(2025-10-15))
+| where AccountName == "g4bri3lintern"
 | where DeviceName == "gab-intern-vm"
-| where FileName =~ "tasklist.exe"
+| where ProcessCommandLine !contains "backgroundTaskHost"
+| where ProcessCommandLine !contains "msedgewebview2.exe"
+| where ProcessCommandLine contains ("Task") or ProcessCommandLine contains ("List") or ProcessCommandLine contains "Last"
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, FolderPath, InitiatingProcessParentFileName, InitiatingProcessUniqueId
+| order by TimeGenerated desc
 ```
+![image](https://github.com/user-attachments/assets/c2b6d26a-c584-4738-9fe6-1c90d64a14a3)
 
 Answer: tasklist.exe
 
